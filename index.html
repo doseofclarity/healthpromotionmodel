@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Health Promotion Models | CHN White Book | Ottawa Charter · HBM · TTM · PRECEDE-PROCEED</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        .transition-all { transition: all 0.3s ease; }
+        .recall-mode .reveal-text {
+            background-color: #cbd5e1;
+            color: transparent;
+            border-radius: 0.375rem;
+            padding: 0 0.25rem;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            box-shadow: inset 0 0 0 1px #94a3b8;
+        }
+        .recall-mode .reveal-text:hover,
+        .recall-mode .reveal-text.revealed {
+            background-color: #fde047;
+            color: #1e293b;
+            box-shadow: none;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #c2410c; border-radius: 8px; }
+        .content-section { animation: fade 0.3s ease; }
+        @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .locked-section { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+        .quiz-feedback-correct { background-color: #dcfce7; border-left: 4px solid #22c55e; }
+        .quiz-feedback-wrong { background-color: #fee2e2; border-left: 4px solid #ef4444; }
+        .nav-btn i.fa-lock, .nav-btn i.fa-unlock-alt { width: 1.5rem; display: inline-block; }
+    </style>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { hpm: { light: '#ffedd5', DEFAULT: '#c2410c', dark: '#9a3412' } } } } }
+    </script>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col md:flex-row font-sans text-slate-800 overflow-hidden">
+
+    <!-- Mobile header -->
+    <div class="md:hidden bg-hpm-dark text-white p-4 flex justify-between items-center shadow-md z-30 shrink-0">
+        <button onclick="toggleMobileMenu()" class="text-white focus:outline-none z-40"><i class="fa-solid fa-bars text-2xl"></i></button>
+        <h1 class="font-bold text-lg absolute left-1/2 transform -translate-x-1/2 pointer-events-none"><i class="fa-solid fa-heartbeat mr-2"></i>Health Promotion</h1>
+        <div class="w-8"></div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <nav id="sidebar" class="hidden md:flex flex-col w-full md:w-80 bg-white shadow-2xl h-full absolute md:relative z-30 transition-transform duration-300 shrink-0 border-r border-slate-200">
+        <div class="p-6 bg-gradient-to-br from-hpm-dark to-hpm text-white hidden md:block shrink-0">
+            <h1 class="font-black text-2xl tracking-wide"><i class="fa-solid fa-chart-line mr-2"></i> Health Promotion Models</h1>
+            <p class="text-sm text-slate-300 mt-1">Ottawa Charter · HBM · TTM · PRECEDE-PROCEED · Pender</p>
+        </div>
+        <div class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1 text-sm font-medium">
+                <li><button onclick="showSection('home')" id="btn-home" class="nav-btn w-full text-left px-6 py-3 bg-hpm-light text-hpm-dark border-r-4 border-hpm-dark"><i class="fa-solid fa-house w-6 nav-icon"></i><i class="fa-solid fa-lock w-6 hidden"></i> Start / Overview</button></li>
+                <li><button onclick="showSection('ottawa')" id="btn-ottawa" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 locked-section"><i class="fa-solid fa-file-signature w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6"></i> Ottawa Charter (1986)</button></li>
+                <li><button onclick="showSection('hbm')" id="btn-hbm" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 locked-section"><i class="fa-solid fa-brain w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6"></i> Health Belief Model (HBM)</button></li>
+                <li><button onclick="showSection('ttm')" id="btn-ttm" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 locked-section"><i class="fa-solid fa-diagram-project w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6"></i> Transtheoretical Model (TTM)</button></li>
+                <li><button onclick="showSection('precede')" id="btn-precede" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 locked-section"><i class="fa-solid fa-cogs w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6"></i> PRECEDE-PROCEED Model</button></li>
+                <li><button onclick="showSection('pender')" id="btn-pender" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 locked-section"><i class="fa-solid fa-female w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6"></i> Pender's Health Promotion Model</button></li>
+                <li><button onclick="showSection('phn_application')" id="btn-phn_application" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 locked-section"><i class="fa-solid fa-user-nurse w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6"></i> PHN Application in Practice</button></li>
+                <li><button onclick="showSection('mnemonics')" id="btn-mnemonics" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 border-t mt-2 locked-section"><i class="fa-solid fa-brain w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6"></i> Mnemonics & Recap</button></li>
+                <li><button onclick="showSection('final_quiz_sec')" id="btn-final_quiz_sec" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 locked-section"><i class="fa-solid fa-graduation-cap w-6 text-amber-500 nav-icon hidden"></i><i class="fa-solid fa-lock w-6"></i> Final 50‑Item Exam</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-1 h-full overflow-y-auto bg-slate-100 relative w-full">
+        <div class="fixed top-16 md:top-4 right-4 md:right-8 z-40 flex items-center bg-white/90 backdrop-blur px-4 py-3 rounded-full shadow-lg border border-slate-200 cursor-pointer hover:bg-slate-50" onclick="toggleRecallMode()">
+            <span class="mr-3 text-sm font-bold text-slate-700 hidden md:inline"><i class="fa-solid fa-brain text-hpm mr-1"></i> Active Recall</span>
+            <span class="mr-3 text-sm font-bold text-slate-700 md:hidden"><i class="fa-solid fa-brain text-hpm"></i></span>
+            <button id="recall-toggle" class="w-12 h-6 bg-slate-300 rounded-full relative transition-colors duration-300 pointer-events-none"><div id="recall-knob" class="w-5 h-5 bg-white rounded-full absolute top-0.5 left-0.5 transition-transform duration-300 shadow"></div></button>
+        </div>
+
+        <div class="p-4 md:p-8 max-w-6xl mx-auto pb-32">
+            <!-- HOME SECTION -->
+            <section id="home" class="content-section flex flex-col items-center justify-center min-h-[80vh] text-center block">
+                <div class="bg-gradient-to-br from-slate-800 to-hpm-dark text-white rounded-3xl shadow-2xl p-10 md:p-16 w-full">
+                    <div class="relative z-10">
+                        <div class="bg-white/10 inline-block p-4 rounded-full mb-6"><i class="fa-solid fa-heartbeat text-5xl"></i></div>
+                        <h3 class="text-xl font-bold text-slate-300 mb-2 uppercase">Foundations of Health Education</h3>
+                        <h1 class="text-4xl md:text-6xl font-black mb-6">Health Promotion Models<br>for Public Health Nursing</h1>
+                        <div class="bg-white/10 inline-block px-6 py-3 rounded-full mb-10"><p class="text-lg">Ottawa Charter · HBM · TTM · PRECEDE-PROCEED · Pender</p></div>
+                        <button onclick="unlockFirstSection()" class="bg-slate-600 hover:bg-slate-500 text-white font-black py-4 px-10 rounded-full shadow-xl text-lg flex items-center mx-auto">Begin Lecture <i class="fa-solid fa-arrow-right ml-3"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- OTTAWA CHARTER -->
+            <section id="ottawa" class="content-section hidden"><div class="bg-white rounded-2xl shadow-lg p-6 md:p-8"><h2 class="text-3xl font-black mb-6 border-b-2 border-hpm pb-3"><i class="fa-solid fa-file-signature text-hpm mr-4"></i> Ottawa Charter for Health Promotion (1986)</h2><div class="grid md:grid-cols-2 gap-6"><div><ul class="list-disc pl-5 space-y-2"><li>First International Conference on Health Promotion, Ottawa, Canada.</li><li>Definition: <span class="reveal-text">“Health promotion is the process of enabling people to increase control over and to improve their health.”</span></li><li>Prerequisites for health: <span class="reveal-text">Peace, shelter, education, food, income, stable ecosystem, sustainable resources, social justice, equity.</span></li></ul></div><div><div class="bg-amber-50 p-4 rounded-xl"><p class="font-bold">Five Action Areas (mnemonic: <span class="text-hpm">B.R.S.D.R.</span>)</p><ul><li><span class="reveal-text">Build Healthy Public Policy</span></li><li><span class="reveal-text">Create Supportive Environments</span></li><li><span class="reveal-text">Strengthen Community Action</span></li><li><span class="reveal-text">Develop Personal Skills</span></li><li><span class="reveal-text">Reorient Health Services</span></li></ul></div></div></div><div class="mt-4 p-3 bg-green-50 rounded-lg"><p><strong>Key principle:</strong> Health promotion goes beyond healthcare – integrates political, economic, social, and environmental strategies.</p></div><button onclick="openQuiz('ottawa')" class="mt-8 w-full bg-hpm text-white font-black py-4 rounded-xl">📜 Take Quiz (10 items) to Unlock Next Section</button></div></section>
+
+            <!-- HEALTH BELIEF MODEL -->
+            <section id="hbm" class="content-section hidden"><div class="bg-white rounded-2xl shadow-lg p-6 md:p-8"><h2 class="text-3xl font-black mb-6 border-b-2 border-hpm pb-3"><i class="fa-solid fa-brain text-hpm mr-4"></i> Health Belief Model (HBM) – Rosenstock & Becker</h2><div class="grid md:grid-cols-2 gap-6"><div><ul class="list-disc pl-5 space-y-2"><li>Explains why people take health actions based on their perceptions.</li><li>Key constructs:</li><li><span class="reveal-text">Perceived susceptibility</span> – belief about getting a disease.</li><li><span class="reveal-text">Perceived severity</span> – belief about seriousness of the disease.</li><li><span class="reveal-text">Perceived benefits</span> – belief in effectiveness of recommended action.</li><li><span class="reveal-text">Perceived barriers</span> – obstacles to taking action (cost, inconvenience).</li><li><span class="reveal-text">Cues to action</span> – triggers that prompt action (symptoms, media, advice).</li><li><span class="reveal-text">Self‑efficacy</span> – confidence to perform the behavior (added later).</li></ul></div><div><div class="bg-slate-100 p-4 rounded-xl"><p><strong>Example:</strong> A woman getting a mammogram because she believes she is at risk (susceptibility), breast cancer is serious (severity), mammogram detects early cancer (benefit), and her doctor reminded her (cue to action).</p></div><div class="bg-hpm-light p-3 mt-3 rounded"><p class="font-bold">PHN use: Assess client's beliefs and address barriers to improve compliance.</p></div></div></div><button onclick="openQuiz('hbm')" class="mt-8 w-full bg-hpm text-white font-black py-4 rounded-xl">🧠 Take Quiz (10 items) to Unlock Next Section</button></div></section>
+
+            <!-- TRANSTHEORETICAL MODEL (TTM) -->
+            <section id="ttm" class="content-section hidden"><div class="bg-white rounded-2xl shadow-lg p-6 md:p-8"><h2 class="text-3xl font-black mb-6 border-b-2 border-hpm pb-3"><i class="fa-solid fa-diagram-project text-hpm mr-4"></i> Transtheoretical Model (Stages of Change) – Prochaska & DiClemente</h2><div class="grid md:grid-cols-2 gap-6"><div><ul class="list-disc pl-5 space-y-2"><li><span class="reveal-text">Precontemplation</span> – not intending to change in next 6 months.</li><li><span class="reveal-text">Contemplation</span> – considering change within 6 months.</li><li><span class="reveal-text">Preparation</span> – planning to take action within 30 days.</li><li><span class="reveal-text">Action</span> – actively making changes (less than 6 months).</li><li><span class="reveal-text">Maintenance</span> – sustaining change for more than 6 months.</li><li><span class="reveal-text">Termination</span> – complete confidence; no relapse temptation.</li></ul></div><div><div class="bg-green-50 p-4 rounded-xl"><p><strong>Processes of change:</strong> consciousness raising, self‑reevaluation, counterconditioning, stimulus control, reinforcement management, etc.</p><p class="mt-2"><strong>PHN application:</strong> Tailor interventions to the client's stage (e.g., provide information for contemplation; encourage action steps for preparation).</p></div></div></div><button onclick="openQuiz('ttm')" class="mt-8 w-full bg-hpm text-white font-black py-4 rounded-xl">🔄 Take Quiz (10 items) to Unlock Next Section</button></div></section>
+
+            <!-- PRECEDE-PROCEED MODEL -->
+            <section id="precede" class="content-section hidden"><div class="bg-white rounded-2xl shadow-lg p-6 md:p-8"><h2 class="text-3xl font-black mb-6 border-b-2 border-hpm pb-3"><i class="fa-solid fa-cogs text-hpm mr-4"></i> PRECEDE-PROCEED Model – Green & Kreuter</h2><div class="grid md:grid-cols-2 gap-6"><div><p><strong>PRECEDE (Predisposing, Reinforcing, Enabling Constructs in Educational/Environmental Diagnosis)</strong> – planning phase.</p><ul class="list-disc pl-5"><li>Phase 1: Social diagnosis</li><li>Phase 2: Epidemiological diagnosis</li><li>Phase 3: Behavioral & environmental diagnosis</li><li>Phase 4: Educational & ecological diagnosis (<span class="reveal-text">Predisposing, Reinforcing, Enabling factors</span>)</li><li>Phase 5: Administrative & policy diagnosis</li></ul><p class="mt-2"><strong>PROCEED (Policy, Regulatory, Organizational Constructs in Educational & Environmental Development)</strong> – implementation & evaluation.</p></div><div><div class="bg-slate-100 p-4 rounded-xl"><p class="font-bold">Key constructs:</p><ul><li><span class="reveal-text">Predisposing factors:</span> knowledge, attitudes, beliefs, values.</li><li><span class="reveal-text">Enabling factors:</span> skills, resources, accessibility.</li><li><span class="reveal-text">Reinforcing factors:</span> feedback, social support, incentives.</li></ul><p><strong>PHN use:</strong> Comprehensive community assessment and program planning.</p></div></div></div><button onclick="openQuiz('precede')" class="mt-8 w-full bg-hpm text-white font-black py-4 rounded-xl">📊 Take Quiz (10 items) to Unlock Next Section</button></div></section>
+
+            <!-- PENDER'S HEALTH PROMOTION MODEL -->
+            <section id="pender" class="content-section hidden"><div class="bg-white rounded-2xl shadow-lg p-6 md:p-8"><h2 class="text-3xl font-black mb-6 border-b-2 border-hpm pb-3"><i class="fa-solid fa-female text-hpm mr-4"></i> Pender's Health Promotion Model (HPM)</h2><ul class="list-disc pl-5 space-y-2"><li>Focuses on <span class="reveal-text">positive health and well‑being</span> rather than disease prevention.</li><li>Emphasizes individual characteristics and experiences, behavior-specific cognitions (perceived benefits, barriers, self‑efficacy), and behavioral outcomes.</li><li>Components: <span class="reveal-text">Prior related behavior, personal factors, perceived benefits/barriers, perceived self‑efficacy, activity‑related affect, interpersonal & situational influences, commitment to action, immediate competing demands, health‑promoting behavior.</span></li><li>Widely used in nursing for lifestyle interventions (exercise, nutrition, stress management).</li></ul><div class="bg-hpm-light p-3 mt-3 rounded-lg"><p><strong>PHN role:</strong> Help clients set achievable health goals and enhance self‑efficacy through small successes and positive reinforcement.</p></div><button onclick="openQuiz('pender')" class="mt-8 w-full bg-hpm text-white font-black py-4 rounded-xl">👩‍⚕️ Take Quiz (10 items) to Unlock Next Section</button></div></section>
+
+            <!-- PHN APPLICATION IN PRACTICE -->
+            <section id="phn_application" class="content-section hidden"><div class="bg-white rounded-2xl shadow-lg p-6 md:p-8"><h2 class="text-3xl font-black mb-6 border-b-2 border-hpm pb-3"><i class="fa-solid fa-user-nurse text-hpm mr-4"></i> Applying Health Promotion Models in PHN Practice</h2><ul class="list-disc pl-5 space-y-3"><li><strong>Ottawa Charter:</strong> Advocate for smoke‑free ordinances (healthy public policy), create walking paths (supportive environment), organize community fitness groups (strengthen community action), teach life skills (develop personal skills), ensure RHU offers health screening (reorient health services).</li><li><strong>HBM:</strong> Identify perceived barriers to vaccination, provide cues to action (reminders, incentives).</li><li><strong>TTM:</strong> Match smoking cessation intervention to client's stage (e.g., precontemplation vs. action).</li><li><strong>PRECEDE-PROCEED:</strong> Conduct community diagnosis to identify predisposing, enabling, reinforcing factors before designing a nutrition program.</li><li><strong>Pender's HPM:</strong> Help clients build self‑efficacy for exercise by setting small, achievable goals and celebrating progress.</li></ul><div class="bg-amber-50 p-3 mt-4 rounded-lg"><p><i class="fa-regular fa-lightbulb"></i> <strong>Best practice:</strong> Use multiple models complementarily – e.g., PRECEDE for planning, HBM for message framing, TTM for stage‑matched interventions, Ottawa for policy advocacy.</p></div><button onclick="openQuiz('phn_application')" class="mt-8 w-full bg-hpm text-white font-black py-4 rounded-xl">🩺 Take Quiz (10 items) to Unlock Mnemonics & Final Exam</button></div></section>
+
+            <!-- MNEMONICS & RECAP -->
+            <section id="mnemonics" class="content-section hidden"><div class="bg-white rounded-2xl shadow-lg p-6 md:p-8"><h2 class="text-3xl font-black mb-6 border-b-2 border-hpm pb-3"><i class="fa-solid fa-brain text-hpm mr-4"></i> Mnemonics & Quick Recap</h2><div class="overflow-x-auto"><table class="w-full border-collapse"><thead class="bg-hpm-dark text-white"><tr><th class="p-2">Model</th><th class="p-2">Mnemonic / Key</th><th class="p-2">Core Elements</th></tr></thead><tbody><tr class="border-b"><td class="p-2">Ottawa Charter</td><td class="text-hpm font-black">B.R.S.D.R.</td><td class="reveal-text">Build policy, Supportive env, Strengthen action, Develop skills, Reorient services</td></tr><tr class="bg-slate-50"><td class="p-2">Health Belief Model</td><td class="text-hpm font-black">SeBaBeBar Cues Self</td><td class="reveal-text">Susceptibility, Severity, Benefits, Barriers, Cues to action, Self‑efficacy</td></tr><tr class="border-b"><td class="p-2">Transtheoretical (TTM)</td><td class="text-hpm font-black">P C P A M T</td><td class="reveal-text">Precontemplation, Contemplation, Preparation, Action, Maintenance, Termination</td></tr><tr class="bg-slate-50"><td class="p-2">PRECEDE-PROCEED</td><td class="text-hpm font-black">PER</td><td class="reveal-text">Predisposing, Enabling, Reinforcing factors</td></tr><tr class="border-b"><td class="p-2">Pender's HPM</td><td class="text-hpm font-black">Self‑efficacy + Perceived benefits</td><td class="reveal-text">Individual experiences, behavior-specific cognitions, commitment to action</td></tr></tbody></table></div><button onclick="openQuiz('final_quiz')" class="mt-8 w-full bg-amber-500 text-slate-900 font-black py-4 rounded-xl text-lg">🎓 Take Final 50-Item Exam</button></div></section>
+
+            <!-- FINAL QUIZ SECTION -->
+            <section id="final_quiz_sec" class="content-section hidden"><div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 text-center min-h-[60vh] flex flex-col justify-center items-center"><i class="fa-solid fa-graduation-cap text-8xl text-amber-400 mb-6"></i><h2 class="text-4xl font-black text-slate-800 mb-4">Health Promotion Models Mastery Exam</h2><p class="text-lg text-slate-600 mb-8">50 comprehensive items covering all models. 75% required to pass.</p><button onclick="openQuiz('final_quiz')" class="w-full max-w-md bg-slate-800 text-white font-black py-4 rounded-xl text-xl">Start Final Exam</button></div></section>
+        </div>
+    </main>
+
+    <!-- QUIZ MODAL -->
+    <div id="quiz-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4"><div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl p-6 md:p-8 relative max-h-[90vh] overflow-y-auto"><button onclick="closeQuiz()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-2xl"></i></button><h2 id="quiz-title" class="text-3xl font-black text-slate-800 mb-2"></h2><p class="text-slate-600 mb-6 border-b pb-4">Score ≥75% to unlock next section.</p><div id="quiz-questions-container" class="space-y-4"></div><button id="quiz-submit-btn" onclick="submitQuiz()" class="mt-8 w-full bg-hpm text-white font-bold py-4 rounded-xl">Submit Answers</button><div id="quiz-result-container" class="hidden mt-6 p-4 rounded-xl bg-slate-100 border"></div></div></div>
+
+    <script>
+        let unlockedSections = ['home'];
+        // QUIZ DATA (10 questions each section)
+        const quizzes = {
+            ottawa: { title: "Ottawa Charter (1986)", next: "hbm", questions: [
+                { q: "In which year was the Ottawa Charter adopted?", options: ["1986", "1978", "1990", "2000"], ans: 0 },
+                { q: "Where was the first International Conference on Health Promotion held?", options: ["Ottawa, Canada", "Geneva", "Manila", "London"], ans: 0 },
+                { q: "The Ottawa Charter defines health promotion as:", options: ["Enabling people to increase control over their health", "Curative medicine", "Building hospitals", "Drug therapy"], ans: 0 },
+                { q: "Which of the following is a prerequisite for health according to the Ottawa Charter?", options: ["Peace and shelter", "Fast cars", "Expensive medicines", "Private insurance"], ans: 0 },
+                { q: "Which action area involves creating laws for smoke‑free public places?", options: ["Build Healthy Public Policy", "Create Supportive Environments", "Strengthen Community Action", "Develop Personal Skills"], ans: 0 },
+                { q: "Making walking paths and bicycle lanes is an example of:", options: ["Create Supportive Environments", "Build Healthy Public Policy", "Reorient Health Services", "Develop Personal Skills"], ans: 0 },
+                { q: "Training barangay health workers on health education belongs to:", options: ["Develop Personal Skills", "Strengthen Community Action", "Reorient Health Services", "Build Healthy Public Policy"], ans: 0 },
+                { q: "Which action area shifts focus from cure to prevention?", options: ["Reorient Health Services", "Build Healthy Public Policy", "Create Supportive Environments", "Strengthen Community Action"], ans: 0 },
+                { q: "Organizing a community fitness group is under:", options: ["Strengthen Community Action", "Develop Personal Skills", "Build Healthy Public Policy", "Create Supportive Environments"], ans: 0 },
+                { q: "The Ottawa Charter emphasizes that health is created by:", options: ["Multiple sectors including politics, economics, social", "Only doctors", "Only medicines", "Only hospitals"], ans: 0 }
+            ]},
+            hbm: { title: "Health Belief Model", next: "ttm", questions: [
+                { q: "The Health Belief Model was developed by:", options: ["Rosenstock & Becker", "Prochaska & DiClemente", "Green & Kreuter", "Nola Pender"], ans: 0 },
+                { q: "Perceived susceptibility refers to:", options: ["Belief about getting a disease", "Belief about seriousness", "Belief about treatment effectiveness", "Confidence to act"], ans: 0 },
+                { q: "Which HBM construct refers to the belief that a health action will be effective?", options: ["Perceived benefits", "Perceived severity", "Perceived barriers", "Self-efficacy"], ans: 0 },
+                { q: "A patient says, 'I can't quit smoking because it's too hard' – this is an example of:", options: ["Perceived barriers", "Perceived susceptibility", "Perceived severity", "Cues to action"], ans: 0 },
+                { q: "A doctor advising a patient to get a flu shot is an example of:", options: ["Cues to action", "Self-efficacy", "Perceived benefits", "Perceived barriers"], ans: 0 },
+                { q: "Which construct was added later to HBM to enhance prediction?", options: ["Self-efficacy", "Perceived susceptibility", "Perceived severity", "Cues to action"], ans: 0 },
+                { q: "A woman who believes breast cancer is a deadly disease has high:", options: ["Perceived severity", "Perceived susceptibility", "Perceived benefits", "Self-efficacy"], ans: 0 },
+                { q: "HBM is most useful for:", options: ["Explaining health behavior related to perceived threat", "Community organizing", "Policy development", "Epidemiology"], ans: 0 },
+                { q: "Which factor is NOT part of the original HBM?", options: ["Social support", "Perceived susceptibility", "Perceived benefits", "Perceived barriers"], ans: 0 },
+                { q: "A PHN using HBM would first assess:", options: ["Client's beliefs about disease risk and severity", "Stage of change", "Environmental factors", "Policy barriers"], ans: 0 }
+            ]},
+            ttm: { title: "Transtheoretical Model (Stages of Change)", next: "precede", questions: [
+                { q: "TTM was developed by:", options: ["Prochaska & DiClemente", "Rosenstock & Becker", "Green & Kreuter", "Nola Pender"], ans: 0 },
+                { q: "A person who is not thinking about changing behavior in the next 6 months is in which stage?", options: ["Precontemplation", "Contemplation", "Preparation", "Action"], ans: 0 },
+                { q: "A smoker who plans to quit within 30 days is in:", options: ["Preparation", "Contemplation", "Action", "Precontemplation"], ans: 0 },
+                { q: "Which stage involves active behavior change for less than 6 months?", options: ["Action", "Maintenance", "Preparation", "Contemplation"], ans: 0 },
+                { q: "After 8 months of regular exercise, a person is in:", options: ["Maintenance", "Action", "Termination", "Preparation"], ans: 0 },
+                { q: "The final stage where relapse is no longer a temptation is called:", options: ["Termination", "Maintenance", "Action", "Transcendence"], ans: 0 },
+                { q: "Providing information about the health risks of smoking is most effective for which stage?", options: ["Precontemplation / Contemplation", "Action", "Maintenance", "Termination"], ans: 0 },
+                { q: "Helping a client identify triggers and use rewards is appropriate for:", options: ["Action / Maintenance", "Precontemplation", "Contemplation", "Termination"], ans: 0 },
+                { q: "The process of 'consciousness raising' is used in which stages?", options: ["Precontemplation/Contemplation", "Action", "Maintenance", "Termination"], ans: 0 },
+                { q: "TTM emphasizes that behavior change is:", options: ["A cyclical process", "A single event", "Only linear", "Not influenced by readiness"], ans: 0 }
+            ]},
+            precede: { title: "PRECEDE-PROCEED Model", next: "pender", questions: [
+                { q: "PRECEDE-PROCEED was developed by:", options: ["Green & Kreuter", "Prochaska & DiClemente", "Rosenstock & Becker", "Nola Pender"], ans: 0 },
+                { q: "The PRECEDE phase focuses on:", options: ["Planning and diagnosis", "Implementation", "Evaluation only", "Policy making"], ans: 0 },
+                { q: "PROCEED stands for:", options: ["Policy, Regulatory, Organizational Constructs in Educational & Environmental Development", "Program for Community Health", "Process of Change", "Promotion of Health"], ans: 0 },
+                { q: "Which factor includes knowledge, attitudes, and beliefs?", options: ["Predisposing factors", "Enabling factors", "Reinforcing factors", "Environmental factors"], ans: 0 },
+                { q: "Availability of a health clinic in the barangay is an example of:", options: ["Enabling factor", "Predisposing factor", "Reinforcing factor", "Behavioral factor"], ans: 0 },
+                { q: "Social support from family and friends is a:", options: ["Reinforcing factor", "Predisposing factor", "Enabling factor", "Genetic factor"], ans: 0 },
+                { q: "The first phase of PRECEDE is:", options: ["Social diagnosis", "Epidemiological diagnosis", "Behavioral diagnosis", "Educational diagnosis"], ans: 0 },
+                { q: "Phase 5 of PRECEDE is:", options: ["Administrative & policy diagnosis", "Evaluation", "Implementation", "Social diagnosis"], ans: 0 },
+                { q: "PROCEED includes phases for:", options: ["Implementation and evaluation", "Only planning", "Only diagnosis", "Only policy"], ans: 0 },
+                { q: "PRECEDE-PROCEED is best used for:", options: ["Comprehensive community health program planning", "Individual counseling", "Disease treatment", "Medical diagnosis"], ans: 0 }
+            ]},
+            pender: { title: "Pender's Health Promotion Model", next: "phn_application", questions: [
+                { q: "Pender's HPM focuses on:", options: ["Positive health and well-being", "Disease prevention only", "Treatment of illness", "Genetic factors"], ans: 0 },
+                { q: "Which concept refers to a person's confidence to perform a health behavior?", options: ["Self-efficacy", "Perceived benefits", "Perceived barriers", "Activity-related affect"], ans: 0 },
+                { q: "In Pender's model, 'prior related behavior' is considered:", options: ["Individual characteristic and experience", "Behavioral outcome", "Commitment to action", "Interpersonal influence"], ans: 0 },
+                { q: "A client who feels good after exercising is experiencing:", options: ["Activity-related affect", "Perceived barrier", "Self-efficacy", "Situational influence"], ans: 0 },
+                { q: "Pender's model emphasizes:", options: ["Commitment to a plan of action", "Fear appeals", "Medical diagnosis", "Disease surveillance"], ans: 0 },
+                { q: "Which of the following is a behavior-specific cognition in HPM?", options: ["Perceived benefits of action", "Age", "Gender", "Genetic makeup"], ans: 0 },
+                { q: "Interpersonal influences (family, peers) are part of:", options: ["Pender's HPM", "HBM", "TTM", "Ottawa Charter"], ans: 0 },
+                { q: "Pender's model is widely used in:", options: ["Lifestyle interventions (exercise, diet)", "Acute care", "Surgery", "Emergency medicine"], ans: 0 },
+                { q: "Enhancing self-efficacy can be achieved by:", options: ["Small successes and positive reinforcement", "Fear tactics", "Coercion", "Punishment"], ans: 0 },
+                { q: "The ultimate outcome in Pender's HPM is:", options: ["Health-promoting behavior", "Perceived threat", "Cues to action", "Stage of change"], ans: 0 }
+            ]},
+            phn_application: { title: "PHN Application of Models", next: "mnemonics", questions: [
+                { q: "Using the Ottawa Charter to advocate for a smoking ban in public places addresses which action area?", options: ["Build Healthy Public Policy", "Develop Personal Skills", "Strengthen Community Action", "Reorient Health Services"], ans: 0 },
+                { q: "A PHN organizes a community walking group. This applies which Ottawa Charter action?", options: ["Strengthen Community Action", "Build Healthy Public Policy", "Develop Personal Skills", "Create Supportive Environments"], ans: 0 },
+                { q: "To address vaccine hesitancy using HBM, the PHN should:", options: ["Assess perceived barriers and provide cues to action", "Only give vaccines", "Ignore concerns", "Force vaccination"], ans: 0 },
+                { q: "Using TTM, a PHN who gives information about health risks to a precontemplative smoker is using which process?", options: ["Consciousness raising", "Stimulus control", "Contingency management", "Helping relationships"], ans: 0 },
+                { q: "In PRECEDE-PROCEED, identifying that a community lacks a grocery store with fresh vegetables is an example of:", options: ["Enabling factor", "Predisposing factor", "Reinforcing factor", "Behavioral factor"], ans: 0 },
+                { q: "Using Pender's HPM, a PHN helps a diabetic client set realistic daily walking goals. This enhances:", options: ["Self-efficacy", "Perceived severity", "Perceived susceptibility", "Cues to action"], ans: 0 },
+                { q: "A PHN conducts a community diagnosis using PRECEDE's epidemiological diagnosis to:", options: ["Identify health problems and their causes", "Develop policy", "Implement interventions", "Evaluate outcomes"], ans: 0 },
+                { q: "Which model is most appropriate for planning a multi‑year community nutrition program?", options: ["PRECEDE-PROCEED", "HBM", "TTM", "Pender's HPM"], ans: 0 },
+                { q: "A PHN uses the 'reorient health services' action area by:", options: ["Ensuring RHUs offer lifestyle counseling", "Building more hospitals", "Increasing drug prices", "Reducing staff"], ans: 0 },
+                { q: "To help a client maintain exercise behavior, which TTM stage would apply?", options: ["Maintenance", "Action", "Preparation", "Contemplation"], ans: 0 }
+            ]}
+        };
+
+        // Build final 50-item exam
+        let finalQs = [];
+        for(let sec of ['ottawa','hbm','ttm','precede','pender','phn_application']) {
+            finalQs = finalQs.concat(quizzes[sec].questions.slice(0,9));
+        }
+        while(finalQs.length < 50) finalQs.push(quizzes['ottawa'].questions[0]);
+        quizzes['final_quiz'] = { title: "Final 50-Item Exam: Health Promotion Models", next: null, questions: finalQs };
+
+        function unlockFirstSection() { if(!unlockedSections.includes('ottawa')) { unlockedSections.push('ottawa'); updateSidebarUI(); } showSection('ottawa'); }
+        function showSection(id) { if(!unlockedSections.includes(id) && id !== 'home') { alert("Complete the quiz at the bottom of the previous section to unlock."); return; } document.querySelectorAll('.content-section').forEach(el=>el.classList.add('hidden')); document.getElementById(id)?.classList.remove('hidden'); document.querySelectorAll('.nav-btn').forEach(btn=>{btn.classList.remove('bg-hpm-light','text-hpm-dark','border-r-4','border-hpm-dark'); btn.classList.add('text-slate-600');}); let active=document.getElementById('btn-'+id); if(active){active.classList.remove('text-slate-600');active.classList.add('bg-hpm-light','text-hpm-dark','border-r-4','border-hpm-dark');} if(window.innerWidth<768)document.getElementById('sidebar').classList.add('hidden'); document.querySelector('main').scrollTop=0; }
+        function updateSidebarUI(){['home','ottawa','hbm','ttm','precede','pender','phn_application','mnemonics','final_quiz_sec'].forEach(sec=>{let btn=document.getElementById('btn-'+sec);if(!btn)return;let lock=btn.querySelector('.fa-lock'),icon=btn.querySelector('.nav-icon');if(unlockedSections.includes(sec)||sec==='home'){btn.classList.remove('locked-section');if(lock)lock.classList.add('hidden');if(icon)icon.classList.remove('hidden');}else{btn.classList.add('locked-section');if(lock)lock.classList.remove('hidden');if(icon)icon.classList.add('hidden');}});}
+        let currentQuiz = null;
+        function openQuiz(sectionId) { currentQuiz=sectionId; let qd=quizzes[sectionId]; document.getElementById('quiz-title').innerText=qd.title; let container=document.getElementById('quiz-questions-container'); container.innerHTML=''; qd.questions.forEach((q,idx)=>{let html=`<div class="bg-slate-50 p-4 rounded-xl mb-4"><p class="font-bold mb-3">${idx+1}. ${q.q}</p><div class="space-y-2">`; q.options.forEach((opt,oi)=>{html+=`<label class="flex items-center space-x-3 p-2 hover:bg-white cursor-pointer"><input type="radio" name="q${idx}" value="${oi}" class="form-radio text-hpm"><span>${opt}</span></label>`;}); html+=`</div><div class="feedback-${idx} text-sm mt-2 hidden"></div></div>`; container.innerHTML+=html;}); document.getElementById('quiz-submit-btn').classList.remove('hidden'); document.getElementById('quiz-result-container').classList.add('hidden'); document.getElementById('quiz-modal').classList.remove('hidden'); }
+        function closeQuiz() { document.getElementById('quiz-modal').classList.add('hidden'); }
+        function submitQuiz() { let qd=quizzes[currentQuiz]; let score=0; for(let i=0;i<qd.questions.length;i++){ let selected=document.querySelector(`input[name="q${i}"]:checked`); let correct=(selected&&parseInt(selected.value)===qd.questions[i].ans); if(correct) score++; let fbDiv=document.querySelector(`.feedback-${i}`); if(fbDiv){ let correctAns=qd.questions[i].options[qd.questions[i].ans]; if(correct){fbDiv.innerHTML='✔ Correct!';fbDiv.parentElement?.classList.add('quiz-feedback-correct');}else{let selectedText=selected?qd.questions[i].options[parseInt(selected.value)]:"No answer";fbDiv.innerHTML=`✘ Incorrect. Correct: ${correctAns}`;fbDiv.parentElement?.classList.add('quiz-feedback-wrong');}fbDiv.classList.remove('hidden');}} let percent=(score/qd.questions.length)*100; let btn=document.getElementById('quiz-submit-btn'); let resultDiv=document.getElementById('quiz-result-container'); btn.classList.add('hidden'); resultDiv.classList.remove('hidden'); if(percent>=75){ if(currentQuiz==='final_quiz'){ resultDiv.innerHTML=`<div class="text-amber-500 text-5xl text-center">🏆</div><h3 class="text-2xl font-black text-center">Excellent!</h3><p class="text-center">Score ${score}/${qd.questions.length} (${percent}%)</p><button onclick="closeQuiz()" class="mt-4 w-full bg-slate-800 text-white py-2 rounded-lg">Close</button>`; return; } if(qd.next && !unlockedSections.includes(qd.next)){ unlockedSections.push(qd.next); if(qd.next==='mnemonics') unlockedSections.push('final_quiz_sec'); updateSidebarUI(); } resultDiv.innerHTML=`<div class="text-green-600 text-5xl text-center">✓</div><h3 class="text-2xl font-black text-center">Passed!</h3><p class="text-center">Score ${score}/${qd.questions.length} (${percent}%)</p><button onclick="closeQuiz(); showSection('${qd.next}')" class="mt-4 w-full bg-green-600 text-white py-2 rounded-lg">Unlock Next Section</button>`; } else { resultDiv.innerHTML=`<div class="text-red-500 text-5xl text-center">✗</div><h3 class="text-2xl font-black text-center">Failed (Need 75%)</h3><p class="text-center">Score ${score}/${qd.questions.length} (${percent}%)</p><button onclick="openQuiz('${currentQuiz}')" class="mt-4 w-full bg-slate-600 text-white py-2 rounded-lg">Try Again</button>`; } }
+        function toggleRecallMode(){ let active=!document.body.classList.contains('recall-mode'); let toggle=document.getElementById('recall-toggle'),knob=document.getElementById('recall-knob'); if(active){document.body.classList.add('recall-mode');toggle.classList.add('bg-hpm-dark');knob.classList.add('translate-x-6');}else{document.body.classList.remove('recall-mode');toggle.classList.remove('bg-hpm-dark');knob.classList.remove('translate-x-6');} }
+        function toggleMobileMenu(){ let s=document.getElementById('sidebar'); if(s.classList.contains('hidden')) s.classList.remove('hidden'); else s.classList.add('hidden'); }
+        document.addEventListener('DOMContentLoaded',()=>{ updateSidebarUI(); document.querySelectorAll('.reveal-text').forEach(el=>el.addEventListener('click',function(){if(document.body.classList.contains('recall-mode'))this.classList.toggle('revealed');})); });
+    </script>
+</body>
+</html>
